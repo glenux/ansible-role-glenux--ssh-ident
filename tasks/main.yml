@@ -1,2 +1,22 @@
 ---
 # tasks file for glenux.ssh-ident
+- name: Install devscripts
+  apt: 
+    pkg=devscripts 
+    state=present
+    install_recommends=no
+
+- name: Fetch ssh-ident sources
+  register: ssh_ident_git
+  git: 
+    repo=https://github.com/ccontavalli/ssh-ident.git
+    dest=/usr/local/src/ssh-ident
+    update=yes
+    accept_hostkey=yes
+
+- name: Install ssh-ident globally
+  file: 
+    src=/usr/local/src/ssh-ident/ssh-ident
+    dest=/usr/local/bin/ssh-ident
+    state=link
+
