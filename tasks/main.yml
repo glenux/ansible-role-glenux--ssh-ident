@@ -7,7 +7,7 @@
     install_recommends=no
 
 - name: Fetch ssh-ident sources
-  register: ssh_ident_git
+  register: sshident_git
   git: 
     repo=https://github.com/ccontavalli/ssh-ident.git
     dest=/usr/local/src/ssh-ident
@@ -19,4 +19,35 @@
     src=/usr/local/src/ssh-ident/ssh-ident
     dest=/usr/local/bin/ssh-ident
     state=link
+
+# TODO: for each ssh-ident user, add links & bashrc thing
+- name: Install for users
+  file:
+    path=~{{item}}/bin
+    state=directory
+  with_items: sshident_users
+
+- file:
+    src=/usr/local/bin/ssh-ident
+    dest=~{{item}}/bin/ssh
+    state=link
+  with_items: sshident_users
+
+- lineinfile:
+    dest=~{{item}}/.bashrc
+    regexp=^alias.scp=
+    line='alias scp="BINARY_SSH=scp /usr/local/bin/ssh-ident"'
+  become: true
+  become_user: "{{item}}"
+  with_items: sshident_users
+
+
+- lineinfile:
+    dest=~{{item}}/.bashrc
+    regexp=^alias.rsync=
+    line='alias scp="BINARY_SSH=rsync /usr/local/bin/ssh-ident"'
+  become: true
+  become_user: "{{item}}"
+  with_items: sshident_users
+
 

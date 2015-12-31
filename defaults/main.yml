@@ -1,8 +1,12 @@
 ---
 # defaults file for glenux.ssh-ident
 
+sshident_users: []
+#   - alice
+#   - bob
+
 sshident_matches: []
-#   - user: 
+#   - user: johndoe
 #     rules: 
 #       - regexp: "work-project-one"
 #         key: work 
@@ -10,4 +14,5 @@ sshident_matches: []
 #         key: work 
 #       - regexp: "personal"
 #         key: personal
-# 
+#   - user: ...
+#     rules: ...
