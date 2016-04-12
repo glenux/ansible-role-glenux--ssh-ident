@@ -22,32 +22,32 @@
 
 # TODO: for each ssh-ident user, add links & bashrc thing
 - name: Install for users
-  file:
-    path=~{{item}}/bin
+  file: >
+    path="~{{item}}/bin"
     state=directory
-  with_items: sshident_users
+  with_items: "{{sshident_users}}"
 
 - file:
     src=/usr/local/bin/ssh-ident
-    dest=~{{item}}/bin/ssh
+    dest="~{{item}}/bin/ssh"
     state=link
-  with_items: sshident_users
+  with_items: "{{sshident_users}}"
 
-- lineinfile:
-    dest=~{{item}}/.bashrc
+- lineinfile: >
+    dest="~{{item}}/.bashrc"
     regexp=^alias.scp=
     line='alias scp="BINARY_SSH=scp /usr/local/bin/ssh-ident"'
   become: true
   become_user: "{{item}}"
-  with_items: sshident_users
+  with_items: "{{sshident_users}}"
 
 
 - lineinfile:
-    dest=~{{item}}/.bashrc
+    dest="~{{item}}/.bashrc"
     regexp=^alias.rsync=
     line='alias scp="BINARY_SSH=rsync /usr/local/bin/ssh-ident"'
   become: true
   become_user: "{{item}}"
-  with_items: sshident_users
+  with_items: "{{sshident_users}}"
 
 
